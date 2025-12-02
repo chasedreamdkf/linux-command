@@ -1,0 +1,62 @@
+{
+  "name": "linux-command-vue",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build",
+    "lint": "eslint . --fix --cache",
+    "format": "prettier --write --experimental-cli src/",
+    "prepare": "husky install"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": ".cz-config.cts"
+    }
+  },
+  "lint-staged": {
+   "src/**/*.{js,vue}": [
+     "eslint --fix",
+     "git add"
+   ]
+ },
+  "dependencies": {
+    "highlight.js": "^11.9.0",
+    "marked": "^11.1.1",
+    "pinia": "^3.0.4",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@tsconfig/node24": "^24.0.3",
+    "@types/node": "^24.10.1",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/test-utils": "^2.4.5",
+    "@vue/tsconfig": "^0.8.1",
+    "cz-customizable": "^7.5.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-vue": "~10.5.1",
+    "happy-dom": "^12.10.3",
+    "husky": "^9.1.7",
+    "jiti": "^2.6.1",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "3.6.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vite-plugin-vue-devtools": "^8.0.5",
+    "vitest": "^1.4.0",
+    "vue-tsc": "^2.0.6"
+  }
+}
