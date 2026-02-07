@@ -3,7 +3,6 @@ import { HomeView } from "./HomeView";
 @Entry
 @Component
 struct Index {
-
   build() {
     Column() {
       Column() {
@@ -11,6 +10,7 @@ struct Index {
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
       }.margin({ left: 5 })
+
       HomeView()
     }
     .margin(5)

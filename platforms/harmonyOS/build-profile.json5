@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\ChaseDream\\.ohos\\config\\default_harmonyOS_niSa0LfSejd2X0ukHYssnjKQ5YME8HU9OoHq5mSo29o=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BFA3A67B4AD6DE51B7AD1803227D690D1A800F03C90FD94F015DC119AD6798E7D2FAD3C9E1D038A",
+          "profile": "C:\\Users\\ChaseDream\\.ohos\\config\\default_harmonyOS_niSa0LfSejd2X0ukHYssnjKQ5YME8HU9OoHq5mSo29o=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\ChaseDream\\.ohos\\config\\default_harmonyOS_niSa0LfSejd2X0ukHYssnjKQ5YME8HU9OoHq5mSo29o=.p12",
+          "storePassword": "0000001B844C2DE095F79993306EE9975E6E1CB5812B0366D957D18F15636E81A9C2F842E1FDE242782B19"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",
