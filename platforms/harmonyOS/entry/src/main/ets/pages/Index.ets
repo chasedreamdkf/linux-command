@@ -9,12 +9,13 @@ struct Index {
         Text("Linux命令搜索引擎")
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
-      }.margin({ left: 5 })
+      }.margin({ left: 5, right: 5 })
 
       HomeView()
     }
-    .margin(5)
+    // .margin(5)
     .backgroundColor('#f1f2f3')
     .height('100%')
+    .width('100%')
   }
 }
