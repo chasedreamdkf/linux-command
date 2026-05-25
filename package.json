@@ -15,7 +15,9 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "tauri:dev": "pnpm tauri dev",
+    "tauri:build": "pnpm tauri build"
   },
   "config": {
     "commitizen": {
@@ -26,11 +28,11 @@
     }
   },
   "lint-staged": {
-   "src/**/*.{js,vue}": [
-     "eslint --fix",
-     "git add"
-   ]
- },
+    "src/**/*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "dependencies": {
     "highlight.js": "^11.9.0",
     "marked": "^11.1.1",
@@ -41,6 +43,7 @@
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
+    "@tauri-apps/cli": "^2.11.2",
     "@tsconfig/node24": "^24.0.3",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^5.0.4",
