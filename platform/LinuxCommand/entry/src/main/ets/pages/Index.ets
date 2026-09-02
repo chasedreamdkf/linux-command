@@ -15,8 +15,10 @@ struct Index {
   @Provide('navPathStack') navPathStack: NavPathStack = new NavPathStack();
   @State searchQuery: string = '';
   @State commands: string[] = [];
+  @State selectedCommand: string = '';
   @State isLoading: boolean = true;
   @State errorMessage: string = '';
+  @StorageProp('currentWidthBreakpoint') @Watch('onWidthBreakpointChanged') currentWidthBreakpoint: WidthBreakpoint = WidthBreakpoint.WIDTH_SM;
   private listViewModel: CommandListViewModel | null = null;
 
   aboutToAppear(): void {
@@ -51,6 +53,7 @@ struct Index {
     this.isLoading = viewModel.isLoading;
     this.errorMessage = viewModel.errorMessage;
     this.commands = viewModel.filteredCommands;
+    this.ensureDefaultDetailInSplit();
   }
 
   private handleSearchChange(value: string): void {
@@ -65,7 +68,39 @@ struct Index {
   }
 
   private openCommandDetail(commandName: string): void {
+    let shouldReplaceDetail: boolean = this.isSplitMode() && this.selectedCommand.length > 0 && this.navPathStack.size() > 0;
+    this.selectedCommand = commandName;
+    if (shouldReplaceDetail) {
+      this.navPathStack.replacePathByName(COMMAND_DETAIL_ROUTE, commandName);
+      return;
+    }
     this.navPathStack.pushPathByName(COMMAND_DETAIL_ROUTE, commandName);
+  }
+
+  private onWidthBreakpointChanged(): void {
+    this.ensureDefaultDetailInSplit();
+  }
+
+  private ensureDefaultDetailInSplit(): void {
+    if (this.currentWidthBreakpoint === WidthBreakpoint.WIDTH_SM ||
+      this.currentWidthBreakpoint === WidthBreakpoint.WIDTH_XS ||
+      this.selectedCommand.length > 0 || this.commands.length === 0) {
+      return;
+    }
+
+    this.openCommandDetail(this.commands[0]);
+  }
+
+  private getNavigationMode(): NavigationMode {
+    if (!this.isSplitMode()) {
+      return NavigationMode.Stack;
+    }
+    return NavigationMode.Split;
+  }
+
+  private isSplitMode(): boolean {
+    return this.currentWidthBreakpoint !== WidthBreakpoint.WIDTH_SM &&
+      this.currentWidthBreakpoint !== WidthBreakpoint.WIDTH_XS;
   }
 
   @Builder
@@ -131,7 +166,8 @@ struct Index {
     .width('100%')
     .height('100%')
     .title(APP_TITLE)
-    .mode(NavigationMode.Auto)
+    .mode(this.getNavigationMode())
+    .navBarWidth('50%')
     .navDestination(this.PageMap)
   }
 }

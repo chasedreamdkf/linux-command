@@ -20,6 +20,8 @@ import { window } from '@kit.ArkUI';
 const DOMAIN = 0x0000;
 
 export default class EntryAbility extends UIAbility {
+  private mainWindow: window.Window | null = null;
+
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     try {
       this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
@@ -42,12 +44,22 @@ export default class EntryAbility extends UIAbility {
         hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
         return;
       }
+      this.mainWindow = windowStage.getMainWindowSync();
+      const uiContext = this.mainWindow.getUIContext();
+      AppStorage.setOrCreate('currentWidthBreakpoint', uiContext.getWindowWidthBreakpoint());
+      this.mainWindow.on('windowSizeChange', () => {
+        AppStorage.setOrCreate('currentWidthBreakpoint', uiContext.getWindowWidthBreakpoint());
+      });
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
     });
   }
 
   onWindowStageDestroy(): void {
     // Main window is destroyed, release UI related resources
+    if (this.mainWindow !== null) {
+      this.mainWindow.off('windowSizeChange');
+      this.mainWindow = null;
+    }
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageDestroy');
   }
 

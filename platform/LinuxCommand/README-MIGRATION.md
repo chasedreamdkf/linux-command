@@ -7,6 +7,8 @@
 - 已用 ArkTS + ArkUI 重写首页搜索、命令列表、详情页导航和 Markdown 基础渲染。
 - 已采用轻量 MVVM 分层：`model/`、`viewmodel/`、`views/`、`pages/`、`utils/`。
 - 命令列表已升级为 `LazyForEach + IDataSource`，搜索结果变化时通过 `DataChangeListener.onDataReloaded()` 通知列表重载，降低大列表首屏创建和滚动内存压力。
+- 已在 `module.json5` 声明 `phone`、`tablet`、`2in1`，并通过窗口宽度断点将 `Navigation` 在 sm/xs 使用 Stack、md/lg/xl 使用 Split；宽屏首次进入会默认打开首个命令详情，避免右侧内容区为空。
+- 分栏模式下点击命令使用 `replacePathByName()` 替换右侧详情页，避免连续点击时不断压入详情页导致页面栈和内存增长。
 
 ## 关键目录
 
