@@ -1,10 +1,59 @@
 /**
- * 命令网格列表组件，使用命令名作为稳定 key。
+ * 命令懒加载数据源，统一管理 LazyForEach 的监听器与刷新通知。
+ */
+class CommandListDataSource implements IDataSource {
+  private listeners: DataChangeListener[] = [];
+  private dataArray: string[] = [];
+
+  totalCount(): number {
+    return this.dataArray.length;
+  }
+
+  getData(index: number): string {
+    return this.dataArray[index];
+  }
+
+  registerDataChangeListener(listener: DataChangeListener): void {
+    if (this.listeners.indexOf(listener) < 0) {
+      this.listeners.push(listener);
+    }
+  }
+
+  unregisterDataChangeListener(listener: DataChangeListener): void {
+    let index: number = this.listeners.indexOf(listener);
+    if (index >= 0) {
+      this.listeners.splice(index, 1);
+    }
+  }
+
+  updateData(commands: string[]): void {
+    this.dataArray = commands.slice();
+    this.notifyDataReload();
+  }
+
+  private notifyDataReload(): void {
+    this.listeners.forEach((listener: DataChangeListener): void => {
+      listener.onDataReloaded();
+    });
+  }
+}
+
+/**
+ * 命令网格列表组件，使用 LazyForEach 按需创建列表项。
  */
 @Component
 export struct CommandGrid {
-  @Prop commands: string[] = [];
+  @Prop @Watch('onCommandsUpdated') commands: string[] = [];
   onCommandClick: (command: string) => void = (command: string): void => {};
+  private dataSource: CommandListDataSource = new CommandListDataSource();
+
+  aboutToAppear(): void {
+    this.dataSource.updateData(this.commands);
+  }
+
+  private onCommandsUpdated(): void {
+    this.dataSource.updateData(this.commands);
+  }
 
   build() {
     Column() {
@@ -17,7 +66,7 @@ export struct CommandGrid {
           .margin({ top: 48 })
       } else {
         List({ space: 8 }) {
-          ForEach(this.commands, (command: string) => {
+          LazyForEach(this.dataSource, (command: string) => {
             ListItem() {
               Row() {
                 Text(command)
