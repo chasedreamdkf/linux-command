@@ -2,15 +2,15 @@
   "string": [
     {
       "name": "module_desc",
-      "value": "module description"
+      "value": "Linux 命令搜索与离线文档"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "Linux 命令搜索与离线文档"
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "Linux 命令"
     }
   ]
 }
