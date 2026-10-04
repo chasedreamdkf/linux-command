@@ -9,6 +9,7 @@
 - 命令列表已升级为 `LazyForEach + IDataSource`，搜索结果变化时通过 `DataChangeListener.onDataReloaded()` 通知列表重载，降低大列表首屏创建和滚动内存压力。
 - 已在 `module.json5` 声明 `phone`、`tablet`、`2in1`，并通过窗口宽度断点将 `Navigation` 在 sm/xs 使用 Stack、md/lg/xl 使用 Split；宽屏首次进入会默认打开首个命令详情，避免右侧内容区为空。
 - 分栏模式下点击命令使用 `replacePathByName()` 替换右侧详情页，避免连续点击时不断压入详情页导致页面栈和内存增长。
+- Markdown 渲染增强：新增表格块（等宽分栏行渲染，支持 2-4 列表格与转义管道 `\|`，语料中 26 个表格全部可解析）、行内富文本（`InlineRichText` 用 `Span` 渲染行内代码、加粗和链接），http(s) 链接点击后经 `UIAbilityContext.openLink()` 打开；段落、列表项、引用和表格单元格均走行内解析，行内代码内不再解析其它行内语法。
 
 ## 关键目录
 
@@ -28,5 +29,6 @@ hdc shell aa start -a EntryAbility -b com.chasedream.linuxcommand
 
 ## 后续增强
 
-- 增强 Markdown 表格、行内代码和链接渲染。
 - 增加收藏、最近浏览、全文搜索和代码块复制按钮。
+- 表格列宽目前按列数固定比例（2/3/4 列各有预设），后续可改为按单元格内容自适应。
+- 图片语法 `![](url)` 与相对路径链接暂未渲染（语料中存在少量此类内容）。
