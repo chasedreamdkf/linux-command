@@ -13,6 +13,7 @@ export class CommandRepository {
   private parser: MarkdownParser = new MarkdownParser();
   private commandList: string[] = [];
   private commandCache: Map<string, CommandInfo> = new Map<string, CommandInfo>();
+  private allTexts: Map<string, string> = new Map<string, string>();
   private textDecoder: util.TextDecoder = util.TextDecoder.create('utf-8', { ignoreBOM: true });
 
   constructor(context: common.UIAbilityContext) {
@@ -37,6 +38,26 @@ export class CommandRepository {
       this.commandList = [];
     }
     return this.commandList.slice();
+  }
+
+  /**
+   * 加载全部命令文档的原始 Markdown（用于全文搜索索引），结果缓存。
+   */
+  async loadAllCommandTexts(): Promise<Map<string, string>> {
+    if (this.allTexts.size > 0) {
+      return this.allTexts;
+    }
+    let names: string[] = await this.loadCommandList();
+    let texts: Map<string, string> = new Map<string, string>();
+    for (let i = 0; i < names.length; i++) {
+      let name: string = names[i];
+      let content: string | null = await this.readRawText(`${COMMAND_FILE_DIR}/${name}.md`);
+      if (content !== null) {
+        texts.set(name, content);
+      }
+    }
+    this.allTexts = texts;
+    return this.allTexts;
   }
 
   async loadCommand(commandName: string): Promise<CommandInfo | null> {

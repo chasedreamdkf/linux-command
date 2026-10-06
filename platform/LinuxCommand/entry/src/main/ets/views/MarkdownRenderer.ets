@@ -1,5 +1,7 @@
 import { common } from '@kit.AbilityKit';
+import { pasteboard } from '@kit.BasicServicesKit';
 
+import { showToast } from '../utils/Toast';
 import {
   MarkdownBlock,
   MarkdownBlockType,
@@ -124,19 +126,32 @@ export struct MarkdownRenderer {
       .margin({ bottom: 12 })
     } else if (block.type === MarkdownBlockType.Code) {
       Column() {
-        if (block.language.length > 0) {
-          Text(block.language)
+        Row() {
+          if (block.language.length > 0) {
+            Text(block.language)
+              .fontSize(12)
+              .fontColor('#6B7280')
+          }
+          Blank()
+          Text('复制')
             .fontSize(12)
-            .fontColor('#6B7280')
-            .margin({ left: 12, top: 8, bottom: 4 })
+            .fontColor('#2563EB')
+            .padding({ left: 12, top: 4, right: 12, bottom: 4 })
+            .backgroundColor('#E0E7FF')
+            .borderRadius(10)
+            .onClick(() => {
+              this.copyCode(block.content);
+            })
         }
+        .width('100%')
+        .padding({ left: 12, top: 8, right: 12, bottom: 6 })
+
         Scroll() {
           Text(block.content)
             .fontSize(13)
             .fontColor('#111827')
             .fontFamily('Courier New')
             .padding(12)
-            .copyOption(CopyOptions.LocalDevice)
         }
         .width('100%')
         .scrollable(ScrollDirection.Horizontal)
@@ -197,6 +212,22 @@ export struct MarkdownRenderer {
     .borderRadius(10)
     .clip(true)
     .margin({ top: 6, bottom: 12 })
+  }
+
+  /**
+   * 一键复制代码块内容到系统剪贴板。
+   */
+  private copyCode(content: string): void {
+    if (content.length === 0) {
+      return;
+    }
+    let data: pasteboard.PasteData = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, content);
+    let uiContext: UIContext = this.getUIContext();
+    pasteboard.getSystemPasteboard().setData(data).then((): void => {
+      showToast(uiContext, '已复制代码');
+    }).catch((error: Error): void => {
+      showToast(uiContext, '复制失败');
+    });
   }
 
   /**

@@ -44,7 +44,9 @@ class CommandListDataSource implements IDataSource {
 @Component
 export struct CommandGrid {
   @Prop @Watch('onCommandsUpdated') commands: string[] = [];
+  @Prop favorites: string[] = [];
   onCommandClick: (command: string) => void = (command: string): void => {};
+  onFavoriteClick: (command: string) => void = (command: string): void => {};
   private dataSource: CommandListDataSource = new CommandListDataSource();
 
   aboutToAppear(): void {
@@ -76,6 +78,13 @@ export struct CommandGrid {
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
                 Blank()
+                Text(this.favorites.indexOf(command) >= 0 ? '★' : '☆')
+                  .fontSize(16)
+                  .fontColor(this.favorites.indexOf(command) >= 0 ? '#F59E0B' : '#C4C9D4')
+                  .margin({ right: 6 })
+                  .onClick(() => {
+                    this.onFavoriteClick(command);
+                  })
                 Text('›')
                   .fontSize(20)
                   .fontColor('#9CA3AF')
